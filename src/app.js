@@ -1,34 +1,13 @@
-angular.module('app').service('searchService', function( $q, _ ) { // _ is lodash
-
-  var cache = [
-    {
-      id: "current",
-      name: "Current",
-      description: "Search current data"
-    },
-    {
-      id: "historical",
-      name: "Historical",
-      description: "Search historical data"
+angular.module('customer').controller('customer-controller', [
+    'customer-formatting-service',
+    function(customerFormattingService){
+        this.productName = 'Food';
+        this.getSalesDate = function(){
+          return new Date();
+        };
+        this.printSalesReport = function(customerId){
+            var customerInfo = customerFormattingService.getFormattedCustomerInfo(customerId);
+            return this.productName + ' ' + customerInfo + ' ' + this.getSalesDate().toDateString();
+        };
     }
-  ];
-
-  this.getSearchOptions = function() {
-    var deferred = $q.defer();
-    deferred.resolve( angular.copy( cache ) );
-    return( deferred.promise );
-  };
-
-  this.getSearchOptionsByID = function( id ) {
-    var deferred = $q.defer();
-    var searchOption = _.findWithProperty( cache, "id", id );
-
-    if ( searchOption ) {
-      deferred.resolve( angular.copy( searchOption ) );
-    } else {
-      deferred.reject();
-    }
-    return( deferred.promise );
-   };
-  }
-);
+]);
